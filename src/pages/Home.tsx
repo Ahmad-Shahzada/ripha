@@ -142,9 +142,9 @@ const Home: React.FC = () => {
             className="bg-white/5 backdrop-blur-xl p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl max-w-4xl border border-white/10 ring-1 ring-white/20"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-cinzel leading-tight tracking-wide text-white mb-5 drop-shadow-lg">
-              Excellence in{" "}
+              Welcome to{" "}
               <span className="bg-gradient-to-r from-blue-600 to-cyan-300 text-transparent bg-clip-text underline decoration-blue-100/60 underline-offset-8">
-                Education
+               Ripha
               </span>
             </h1>
 

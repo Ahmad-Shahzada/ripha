@@ -30,18 +30,21 @@ const Moments: React.FC = () => {
     },
     {
       id: 2,
-      url: "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800",
+      url: "/images/ric-2.jpg",
       title: "Graduation Ceremony",
       category: "events",
-      description: "Annual graduation ceremony celebrating student achievements",
+      description:
+        "Annual graduation ceremony celebrating student achievements",
     },
     {
       id: 3,
-      url: "https://images.pexels.com/photos/1263348/pexels-photo-1263348.jpeg?auto=compress&cs=tinysrgb&w=800",
-      title: "Sports Day",
-      category: "sports",
-      description: "Students participating in annual sports day activities",
+      url: "/images/ric-3.jpg",
+      title: "Annual Party",
+      category: "events",
+      description:
+        "The annual party was a vibrant celebration filled with music, performances, and joyful moments where students and faculty came together to enjoy the evening.",
     },
+
     {
       id: 4,
       url: "https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=800",

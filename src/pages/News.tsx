@@ -30,16 +30,16 @@ const News: React.FC = () => {
   const newsArticles = [
     {
       id: 1,
-      title: "Admissions Open for Session 2024-25",
+      title: "Admissions Open for Session 2025",
       excerpt:
         "Ripha International College announces admissions for Intermediate and ADP programs. Early bird discount available.",
       content:
         "We are excited to announce that admissions are now open for the academic session 2024-25. Students can apply for various programs including FSc Pre-Medical, Pre-Engineering, ICS, ICom, FA, and ADP programs.",
       category: "admissions",
-      date: "2024-01-15",
+      date: "2025-09-15",
       author: "Admissions Office",
       image:
-        "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "/public/images/ric-4.jpg",
       featured: true,
     },
     {
@@ -53,7 +53,7 @@ const News: React.FC = () => {
       date: "2024-01-10",
       author: "Science Department",
       image:
-        "https://images.pexels.com/photos/159844/cellular-education-classroom-159844.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "/images/ric-6.png",
       featured: false,
     },
     {
@@ -64,10 +64,10 @@ const News: React.FC = () => {
       content:
         "RIC is organizing its annual sports day with various competitions including cricket, football, basketball, and track events. Medals and trophies will be awarded to winners.",
       category: "events",
-      date: "2024-01-08",
+      date: "2025-9-10",
       author: "Sports Committee",
       image:
-        "https://images.pexels.com/photos/1263348/pexels-photo-1263348.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "/images/ric-7.png",
       featured: false,
     },
     {
@@ -95,7 +95,7 @@ const News: React.FC = () => {
       date: "2024-01-03",
       author: "IT Department",
       image:
-        "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "/images/ric-5.jpg",
       featured: false,
     },
     {
@@ -106,10 +106,10 @@ const News: React.FC = () => {
       content:
         "We are proud to announce that our students have achieved exceptional results in the recent board examinations. The hard work of students and faculty has paid off.",
       category: "results",
-      date: "2023-12-28",
+      // date: "2025-12-28",
       author: "Academic Office",
       image:
-        "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "/images/ric-1.jpg",
       featured: true,
     },
   ];
@@ -233,7 +233,7 @@ const News: React.FC = () => {
                   <motion.img
                     src={article.image}
                     alt={article.title}
-                    className="w-full h-56 object-cover"
+                    className="w-full h-56 object-fill"
                     style={{ transform: "translateZ(20px)" }} // Pushes image forward slightly
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}

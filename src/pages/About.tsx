@@ -146,7 +146,7 @@ const About: React.FC = () => {
       label: "Successful Alumni",
       suffix: "+",
     },
-    { icon: School, value: 2000, label: "Current Students", suffix: "+" },
+    { icon: School, value: 1000, label: "Current Students", suffix: "+" },
     { icon: UserCheck, value: 50, label: "Expert Faculty", suffix: "+" },
   ];
 
@@ -167,7 +167,7 @@ const About: React.FC = () => {
       name: "Advanced Computer Labs",
       icon: Dna,
       image:
-        "https://images.pexels.com/photos/5775854/pexels-photo-5775854.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "/images/ric-5.jpg",
     },
   ];
 
@@ -305,7 +305,7 @@ const About: React.FC = () => {
                 A Message from Our Principal
               </h2>
               <p className="text-gray-500 mb-6 text-lg">
-                Dr. Muhammad Ali Khan
+                Muhammad Irfan Shahzad Zargar
               </p>
               <div className="space-y-4 text-gray-600 text-lg leading-relaxed border-l-4 border-amber-400 pl-8">
                 <p>

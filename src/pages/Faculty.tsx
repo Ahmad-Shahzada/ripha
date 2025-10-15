@@ -24,123 +24,107 @@ const Faculty: React.FC = () => {
 
   const facultyMembers = [
     {
-      name: "Dr. Muhammad Ali Khan",
-      position: "Principal",
-      department: "administration",
-      qualification: "Ph.D. in Education",
-      experience: "20 years",
-      email: "principal@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/7662888/pexels-photo-7662888.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Educational Leadership, Curriculum Development",
-    },
-    {
-      name: "Prof. Sarah Ahmed",
-      position: "Head of Sciences Department",
-      department: "sciences",
-      qualification: "M.Sc. Physics, B.Ed.",
-      experience: "15 years",
-      email: "sarah.ahmed@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Physics, Applied Sciences",
-    },
-    {
-      name: "Mr. Hassan Raza",
-      position: "Senior Lecturer",
-      department: "mathematics",
-      qualification: "M.Sc. Mathematics",
-      experience: "12 years",
-      email: "hassan.raza@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Pure Mathematics, Applied Mathematics",
-    },
-    {
-      name: "Ms. Fatima Qureshi",
-      position: "Computer Science Lecturer",
-      department: "computer",
-      qualification: "M.Sc. Computer Science",
-      experience: "8 years",
-      email: "fatima.qureshi@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Programming, Database Management",
-    },
-    {
-      name: "Mr. Ahmed Malik",
-      position: "Chemistry Lecturer",
-      department: "sciences",
-      qualification: "M.Sc. Chemistry",
-      experience: "10 years",
-      email: "ahmed.malik@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Organic Chemistry, Analytical Chemistry",
-    },
-    {
-      name: "Dr. Ayesha Tariq",
-      position: "Biology Lecturer",
-      department: "sciences",
-      qualification: "Ph.D. Biology",
-      experience: "14 years",
-      email: "ayesha.tariq@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Molecular Biology, Genetics",
-    },
-    {
-      name: "Mr. Usman Sheikh",
-      position: "Commerce Lecturer",
-      department: "commerce",
-      qualification: "MBA Finance",
-      experience: "9 years",
-      email: "usman.sheikh@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Accounting, Business Studies",
-    },
-    {
-      name: "Ms. Zara Noor",
-      position: "English Lecturer",
+      name: "Khaliq Yar",
+      position: "Lecturer in Pakistan Studies",
       department: "languages",
-      qualification: "M.A. English Literature",
-      experience: "11 years",
-      email: "zara.noor@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "English Literature, Creative Writing",
+      qualification: "M.A Pakistan Studies",
+      experience: "4 years",
+      image: "/images/teacher-10.jpg",
+      specialization:
+        "History, Geography, and Political Development of Pakistan",
     },
     {
-      name: "Prof. Nasir Iqbal",
-      position: "Economics Lecturer",
-      department: "arts",
-      qualification: "M.A. Economics",
-      experience: "16 years",
-      email: "nasir.iqbal@ric.edu.pk",
-      phone: "+92-XXX-XXXXXXX",
-      image:
-        "https://images.pexels.com/photos/3184336/pexels-photo-3184336.jpeg?auto=compress&cs=tinysrgb&w=400",
-      specialization: "Microeconomics, Development Economics",
+      name: "Kishwar Nazir",
+      position: "Lecturer in Zoology",
+      department: "Humanities",
+      qualification: "MSc Zoology, B.Ed",
+      experience: "7 years",
+      image: "/images/teacher-1.jpg",
+      specialization: "Biology, Ecology, and Wildlife Studies",
     },
-  ];
-  const sectionFade = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.8 } },
-  };
-  const stats = [
-    { end: 50, suffix: "+", label: "Faculty Members" },
-    { end: 5, suffix: "+", label: "M-Phil Holders" },
-    { end: 15, suffix: "+", label: "Years Avg Experience" },
-    { end: 6, suffix: "", label: "Departments" },
+    {
+      name: "Toshiba Saifullah",
+      position: "Lecturer in Information Technology",
+      department: "Department of Computer Science and IT",
+      qualification: "MSc Information Technology",
+      experience: "6 years",
+      image: "/images/teacher-2.jpg",
+      specialization:
+        "Software Development, Networking, and Information Systems",
+    },
+    {
+      name: "Muhammad Safdar",
+      position: "Lecturer in Mathematics",
+      department: "Department of Mathematics",
+      qualification: "MSc Mathematics",
+      experience: "5 years",
+      image: "/images/teacher-3.jpg",
+      specialization: "Pure and Applied Mathematics, Mathematical Analysis",
+    },
+    {
+      name: "Mutrib Rubab",
+      position: "Lecturer in Botany",
+      department: "Department of Biological Sciences",
+      qualification: "MPhil Botany",
+      experience: "8 years",
+      image: "/images/teacher-4.jpg",
+      specialization: "Plant Physiology, Ecology, and Environmental Biology",
+    },
+    {
+      name: "Nasira Azam",
+      position: "Lecturer in English",
+      department: "Department of English Language and Literature",
+      qualification: "M.A English",
+      experience: "10 years",
+      image: "/images/teacher-5.jpg",
+      specialization:
+        "English Literature, Linguistics, and Communication Skills",
+    },
+    {
+      name: "Irfan Shahzad",
+      position: "Lecturer in Urdu",
+      department: "Department of Urdu",
+      qualification: "M.A Urdu",
+      experience: "2 years",
+      image: "/images/teacher-6.jpg",
+      specialization: "Urdu Literature and Linguistics",
+    },
+    {
+      name: "Urwa Murtaza",
+      position: "Lecturer in Islamic Studies",
+      department: "Department of Islamic Studies",
+      qualification: "M.A Islamiyat, B.Ed",
+      experience: "5 years",
+      image: "/images/teacher-7.jpg",
+      specialization: "Qur’anic Studies, Hadith, and Islamic Ethics",
+    },
+    {
+      name: "Umme Salma",
+      position: "Lecturer in Commerce",
+      department: "Department of Commerce",
+      qualification: "MBA (Finance)",
+      experience: "8 years",
+      image: "/images/teacher-8.jpg",
+      specialization: "Finance, Accounting, and Business Management",
+    },
+    {
+      name: "Murawat Rubab",
+      position: "Lecturer in Computer Science",
+      department: "Department of Computer Science and IT",
+      qualification: "MSc IT",
+      experience: "4 years",
+      image: "/images/teacher-9.jpg",
+      specialization: "Programming, Database Systems, and Web Technologies",
+    },
+    {
+      name: "Shahbaz Kazmi",
+      position: "Lecturer in Physics",
+      department: "Department of Physics",
+      qualification: "MSc Physics",
+      experience: "5 years",
+      image: "/images/teacher-11.jpg",
+      specialization: "Theoretical and Applied Physics",
+    },
   ];
   const filteredFaculty =
     selectedDepartment === "all"
@@ -190,32 +174,19 @@ const Faculty: React.FC = () => {
         </div>
       </section>
 
-      {/* Department Filter */}
-      <section className="py-10 bg-gradient-to-r from-blue-50 via-white to-purple-50  relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
-            Our Faculty
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {departments.map((dept) => (
-              <button
-                key={dept.id}
-                onClick={() => setSelectedDepartment(dept.id)}
-                className={`px-6 py-2 rounded-full font-semibold shadow-md transition-all duration-300 ${
-                  selectedDepartment === dept.id
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105"
-                    : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:scale-105"
-                }`}
-              >
-                {dept.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="text-center py-16">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 mb-4">
+          Faculty
+        </h2>
+        <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-500 mx-auto rounded-full mb-3"></div>
+        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          Meet our dedicated and experienced faculty members who inspire
+          excellence in education.
+        </p>
+      </div>
 
       {/* Faculty Grid */}
-      <section className="py-20 relative bg-gradient-to-r from-blue-50 via-white to-purple-50 overflow-hidden">
+      <section className="pb-20 relative bg-gradient-to-r from-blue-50 via-white to-purple-50 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {filteredFaculty.map((member, index) => (
@@ -282,7 +253,6 @@ const Faculty: React.FC = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };
