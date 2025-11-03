@@ -1,425 +1,472 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import axios, { AxiosError } from "axios";
+import { motion } from "framer-motion";
+import { CheckCircle, AlertCircle, Loader } from "lucide-react";
 
-// 1. Define an interface for the form data's shape for type safety
-interface IFormData {
+interface FormData {
   name: string;
   fatherName: string;
   cnic: string;
   phone: string;
   email: string;
-  program: string;
+  address: string;
   lastQualification: string;
   marks: string;
-  address: string;
+  program: string;
 }
 
-const ApplicationForm = () => {
-  // 2. Initialize the state using the useState hook
-  const [formData, setFormData] = useState<IFormData>({
+interface FormErrors {
+  name?: string;
+  fatherName?: string;
+  cnic?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  lastQualification?: string;
+  marks?: string;
+  program?: string;
+}
+
+interface SubmitStatus {
+  success: boolean;
+  message: string;
+}
+
+interface ErrorResponse {
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+const ApplicationForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     fatherName: "",
     cnic: "",
     phone: "",
     email: "",
-    program: "",
+    address: "",
     lastQualification: "",
     marks: "",
-    address: "",
+    program: "",
   });
 
-  // This function was defined but not used, so it can be safely removed.
-  // If you need it later, you can add it back.
-  /*
-  const formatDate = (dateString: string | number | Date) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = date.toLocaleString("default", { month: "short" });
-    const year = date.getFullYear();
-    return { day, month, year };
-  };
-  */
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus | null>(null);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+  const programs: string[] = [
+    "FSc Pre-Medical",
+    "FSc Pre-Engineering",
+    "ICS",
+    "ICom",
+    "FA",
+    "ADP Computer Science",
+    "ADP Business Administration",
+    "ADP Information Technology",
+    "ADP Commerce",
+  ];
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.fatherName.trim())
+      newErrors.fatherName = "Father's name is required";
+    if (!formData.cnic.trim()) {
+      newErrors.cnic = "CNIC is required";
+    } else if (!/^\d{5}-\d{7}-\d{1}$/.test(formData.cnic)) {
+      newErrors.cnic = "CNIC format should be XXXXX-XXXXXXX-X";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^\d{11}$/.test(formData.phone.replace(/\D/g, ""))) {
+      newErrors.phone = "Phone number should be 11 digits";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.lastQualification.trim())
+      newErrors.lastQualification = "Last qualification is required";
+    if (!formData.marks.trim()) {
+      newErrors.marks = "Marks are required";
+    } else {
+      const marksValue = parseFloat(formData.marks);
+      if (isNaN(marksValue) || marksValue < 0 || marksValue > 100) {
+        newErrors.marks = "Marks should be between 0-100";
+      }
+    }
+    if (!formData.program) newErrors.program = "Program selection is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here (e.g., send data to an API)
-    console.log("Form submitted:", formData);
-    alert("Application submitted successfully! We will contact you soon.");
-    // Optionally, reset the form after submission
-    setFormData({
-      name: "",
-      fatherName: "",
-      cnic: "",
-      phone: "",
-      email: "",
-      program: "",
-      lastQualification: "",
-      marks: "",
-      address: "",
-    });
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/admissions",
+        formData
+      );
+      
+
+      setSubmitStatus({
+        success: true,
+        message: response.data.message || "Application submitted successfully!",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        fatherName: "",
+        cnic: "",
+        phone: "",
+        email: "",
+        address: "",
+        lastQualification: "",
+        marks: "",
+        program: "",
+      });
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      console.error("Submission error:", axiosError);
+
+      if (axiosError.response) {
+        // Server responded with error status
+        const { data, status } = axiosError.response;
+
+        if (status === 422 && data.errors) {
+          // Validation errors
+          const serverErrors: FormErrors = {};
+          Object.entries(data.errors).forEach(([field, messages]) => {
+            serverErrors[field as keyof FormErrors] = messages[0];
+          });
+          setErrors(serverErrors);
+          setSubmitStatus({
+            success: false,
+            message: "Please fix the errors below",
+          });
+        } else {
+          // Other server errors
+          setSubmitStatus({
+            success: false,
+            message: data.message || "Server error occurred",
+          });
+        }
+      } else if (axiosError.request) {
+        // Request made but no response received
+        setSubmitStatus({
+          success: false,
+          message: "No response from server. Please check your connection.",
+        });
+      } else {
+        // Error in request setup
+        setSubmitStatus({
+          success: false,
+          message: "Error submitting form",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div>
-      {/* Online Application Form */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 tracking-tight font-lora">
-              Online Application Form
-            </h2>
-            <p className="text-xl text-gray-600">
-              Apply now for admission to RIC
-            </p>
-          </div>
+  <div className="max-w-4xl mx-auto p-8  rounded-2xl shadow-2xl border border-blue-100">
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+  >
+    <h2 className="text-4xl font-extrabold mb-3 text-center text-blue-700">
+      Application Form
+    </h2>
+    <p className="text-gray-600 text-center mb-10 text-lg">
+      Fill out the form below to apply for admission
+    </p>
 
-          {/* The form tag and its onSubmit handler remain the same */}
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-8 sm:p-10 rounded-xl shadow-xl"
+    {/* Status Messages */}
+    {submitStatus && (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`mb-6 p-4 rounded-lg flex items-center shadow-sm ${
+          submitStatus.success
+            ? "bg-green-50 border border-green-200 text-green-700"
+            : "bg-red-50 border border-red-200 text-red-700"
+        }`}
+      >
+        {submitStatus.success ? (
+          <CheckCircle className="h-5 w-5 mr-2" />
+        ) : (
+          <AlertCircle className="h-5 w-5 mr-2" />
+        )}
+        <span className="font-medium">{submitStatus.message}</span>
+      </motion.div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Name */}
+        <div>
+          <label
+            className="block text-gray-800 font-semibold mb-2"
+            htmlFor="name"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              {/* Full Name */}
-              <div className="relative">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  Full Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                  />
-                </div>
-              </div>
-
-              {/* Father's Name */}
-              <div className="relative">
-                <label
-                  htmlFor="fatherName"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  Father's Name *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="fatherName"
-                    name="fatherName"
-                    required
-                    value={formData.fatherName}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                  />
-                </div>
-              </div>
-
-              {/* CNIC/B-Form */}
-              <div className="relative">
-                <label
-                  htmlFor="cnic"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  CNIC/B-Form *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm11 2a1 1 0 10-2 0v1a1 1 0 102 0V6zM4 12a1 1 0 011-1h6a1 1 0 110 2H5a1 1 0 01-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="cnic"
-                    name="cnic"
-                    required
-                    value={formData.cnic}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                  />
-                </div>
-              </div>
-
-              {/* Phone Number */}
-              <div className="relative">
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  Phone Number *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                    </svg>
-                  </div>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    required
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                  />
-                </div>
-              </div>
-
-              {/* Email Address */}
-              <div className="relative">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  Email Address
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                    </svg>
-                  </div>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                  />
-                </div>
-              </div>
-
-              {/* Program */}
-              <div className="relative">
-                <label
-                  htmlFor="program"
-                  className="block text-sm font-semibold text-gray-600 mb-2"
-                >
-                  Program *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                    </svg>
-                  </div>
-                  <select
-                    id="program"
-                    name="program"
-                    required
-                    value={formData.program}
-                    onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none transition"
-                  >
-                    <option value="">Select Program</option>
-                    <option value="fsc-premedical">FSc Pre-Medical</option>
-                    <option value="fsc-preengineering">
-                      FSc Pre-Engineering
-                    </option>
-                    <option value="ics">ICS</option>
-                    <option value="icom">ICom</option>
-                    <option value="fa">FA</option>
-                    <option value="adp-cs">ADP Computer Science</option>
-                    <option value="adp-business">
-                      ADP Business Administration
-                    </option>
-                    <option value="adp-it">ADP Information Technology</option>
-                    <option value="adp-commerce">ADP Commerce</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Last Qualification */}
-              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                <div>
-                  <label
-                    htmlFor="lastQualification"
-                    className="block text-sm font-semibold text-gray-600 mb-2"
-                  >
-                    Last Qualification *
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg
-                        className="h-5 w-5 text-gray-400"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 16c1.255 0 2.443-.29 3.5-.804V4.804zM14.5 4c1.255 0 2.443.29 3.5.804v10A7.969 7.969 0 0114.5 16c-1.255 0-2.443-.29-3.5-.804V4.804A7.968 7.968 0 0114.5 4z" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      id="lastQualification"
-                      name="lastQualification"
-                      required
-                      value={formData.lastQualification}
-                      onChange={handleInputChange}
-                      placeholder="e.g., Matric, Intermediate"
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="marks"
-                    className="block text-sm font-semibold text-gray-600 mb-2"
-                  >
-                    Marks/Percentage *
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg
-                        className="h-5 w-5 text-gray-400"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2a1 1 0 01-.945 1.253l-5.016-.42a1 1 0 01-.685-1.252L8.68 2.256A1 1 0 0110 2h2zm4 10a1 1 0 01.967.744L18.146 17.2a1 1 0 01-.945 1.253l-5.016-.42a1 1 0 01-.685-1.252L12.68 12.256A1 1 0 0114 12h2z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      id="marks"
-                      name="marks"
-                      required
-                      value={formData.marks}
-                      onChange={handleInputChange}
-                      placeholder="e.g., 85%, 450/500"
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Address */}
-            <div className="mt-6">
-              <label
-                htmlFor="address"
-                className="block text-sm font-semibold text-gray-600 mb-2"
-              >
-                Address *
-              </label>
-              <textarea
-                id="address"
-                name="address"
-                required
-                value={formData.address}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <div className="mt-8 text-center">
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-indigo-600 to-cyan-500 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:from-indigo-700 hover:to-cyan-600 hover:scale-105 transform transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-              >
-                <span className="mr-2">Submit Application</span>
-                <svg
-                  className="h-5 w-5 rotate-90"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.428A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                </svg>
-              </button>
-            </div>
-          </form>
+            Full Name *
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="John Doe"
+          />
+          {errors.name && (
+            <p className="mt-1 text-red-500 text-sm">{errors.name}</p>
+          )}
         </div>
-      </section>
-    </div>
+
+        {/* Father's Name */}
+        <div>
+          <label
+            className="block text-gray-800 font-semibold mb-2"
+            htmlFor="fatherName"
+          >
+            Father's Name *
+          </label>
+          <input
+            type="text"
+            id="fatherName"
+            name="fatherName"
+            value={formData.fatherName}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.fatherName ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="Robert Doe"
+          />
+          {errors.fatherName && (
+            <p className="mt-1 text-red-500 text-sm">{errors.fatherName}</p>
+          )}
+        </div>
+
+        {/* CNIC */}
+        <div>
+          <label className="block text-gray-800 font-semibold mb-2" htmlFor="cnic">
+            CNIC/B-Form *
+          </label>
+          <input
+            type="text"
+            id="cnic"
+            name="cnic"
+            value={formData.cnic}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.cnic ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="12345-1234567-1"
+          />
+          {errors.cnic && (
+            <p className="mt-1 text-red-500 text-sm">{errors.cnic}</p>
+          )}
+        </div>
+
+        {/* Phone */}
+        <div>
+          <label className="block text-gray-800 font-semibold mb-2" htmlFor="phone">
+            Phone Number *
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.phone ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="03001234567"
+          />
+          {errors.phone && (
+            <p className="mt-1 text-red-500 text-sm">{errors.phone}</p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-gray-800 font-semibold mb-2" htmlFor="email">
+            Email Address *
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="john@example.com"
+          />
+          {errors.email && (
+            <p className="mt-1 text-red-500 text-sm">{errors.email}</p>
+          )}
+        </div>
+
+        {/* Program */}
+        <div>
+          <label className="block text-gray-800 font-semibold mb-2" htmlFor="program">
+            Program *
+          </label>
+          <select
+            id="program"
+            name="program"
+            value={formData.program}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.program ? "border-red-500" : "border-gray-300"
+            }`}
+          >
+            <option value="">Select a program</option>
+            {programs.map((program) => (
+              <option key={program} value={program}>
+                {program}
+              </option>
+            ))}
+          </select>
+          {errors.program && (
+            <p className="mt-1 text-red-500 text-sm">{errors.program}</p>
+          )}
+        </div>
+
+        {/* Last Qualification */}
+        <div>
+          <label
+            className="block text-gray-800 font-semibold mb-2"
+            htmlFor="lastQualification"
+          >
+            Last Qualification *
+          </label>
+          <input
+            type="text"
+            id="lastQualification"
+            name="lastQualification"
+            value={formData.lastQualification}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.lastQualification ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="Matriculation"
+          />
+          {errors.lastQualification && (
+            <p className="mt-1 text-red-500 text-sm">
+              {errors.lastQualification}
+            </p>
+          )}
+        </div>
+
+        {/* Marks */}
+        <div>
+          <label className="block text-gray-800 font-semibold mb-2" htmlFor="marks">
+            Obtained Marks/Percentage *
+          </label>
+          <input
+            type="text"
+            id="marks"
+            name="marks"
+            value={formData.marks}
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+              errors.marks ? "border-red-500" : "border-gray-300"
+            }`}
+            placeholder="85"
+          />
+          {errors.marks && (
+            <p className="mt-1 text-red-500 text-sm">{errors.marks}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Address */}
+      <div>
+        <label className="block text-gray-800 font-semibold mb-2" htmlFor="address">
+          Residential Address *
+        </label>
+        <textarea
+          id="address"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+          rows={3}
+          className={`w-full px-4 py-3 border rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${
+            errors.address ? "border-red-500" : "border-gray-300"
+          }`}
+          placeholder="123 Main Street, City, Country"
+        ></textarea>
+        {errors.address && (
+          <p className="mt-1 text-red-500 text-sm">{errors.address}</p>
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <div className="flex justify-center pt-4">
+        <motion.button
+          type="submit"
+          disabled={isSubmitting}
+          className={`px-10 py-3 bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full shadow-md transition duration-300 ${
+            isSubmitting
+              ? "opacity-70 cursor-not-allowed"
+              : "hover:shadow-lg hover:scale-105"
+          }`}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          {isSubmitting ? (
+            <div className="flex items-center">
+              <Loader className="animate-spin h-5 w-5 mr-2" />
+              Submitting...
+            </div>
+          ) : (
+            "Submit Application"
+          )}
+        </motion.button>
+      </div>
+    </form>
+  </motion.div>
+</div>
+
   );
 };
 

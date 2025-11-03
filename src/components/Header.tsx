@@ -90,15 +90,15 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
-              <span>+92-XXX-XXXXXXX</span>
+              <span>+92-310-6681075</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
-              <span>info@ric.edu.pk</span>
+              <span>Coordinator.kotmomin@ric.edu.pk</span>
             </div>
           </div>
           <div className="hidden md:block font-medium animate-pulse">
-            Admissions Open 2024-25 —{" "}
+            Admissions Open 2025-26 —{" "}
             <Link to="/admissions" className="underline text-blue-200">
               Apply Now
             </Link>
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
                   RIC
                 </h1>
                 <p className="text-xs text-gray-500">
-                  Ripha International College
+                  Riphah International College
                 </p>
               </div>
             </Link>

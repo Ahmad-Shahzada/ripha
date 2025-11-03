@@ -173,7 +173,7 @@ const PrincipalPage: React.FC = () => {
               className="text-lg md:text-xl text-gray-600 leading-relaxed" 
               variants={itemVariants}
             >
-             "At Ripha International College, we nurture curiosity, inspire critical thinking, and prepare students to lead with confidence. Our dedicated faculty and student-centered programs create a supportive environment where every learner can grow, innovate, and achieve their ambitions."
+             "At Riphah International College, we nurture curiosity, inspire critical thinking, and prepare students to lead with confidence. Our dedicated faculty and student-centered programs create a supportive environment where every learner can grow, innovate, and achieve their ambitions."
             </motion.p>
 
             <motion.div

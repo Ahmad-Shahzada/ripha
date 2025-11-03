@@ -657,59 +657,7 @@ const Admissions: React.FC = () => {
         <ApplicationForm />
       </div>
 
-      {/* Download Section */}
-      <section className="relative py-20 overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 left-10 w-40 h-40 bg-blue-200 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute bottom-10 right-20 w-60 h-60 bg-purple-200 rounded-full opacity-30 blur-3xl"></div>
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 tracking-tight font-lora">
-            Download Forms & Documents
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <button className="bg-white/80 backdrop-blur-xl border border-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transform transition duration-300 ease-out flex items-center space-x-5 group">
-              <Download className="h-10 w-10 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
-              <div className="text-left">
-                <h3 className="font-bold text-lg text-gray-900">
-                  Application Form
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Download printable application form
-                </p>
-              </div>
-            </button>
-
-            {/* Card 2 */}
-            <button className="bg-white/80 backdrop-blur-xl border border-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transform transition duration-300 ease-out flex items-center space-x-5 group">
-              <Download className="h-10 w-10 text-green-600 group-hover:scale-110 transition-transform duration-300" />
-              <div className="text-left">
-                <h3 className="font-bold text-lg text-gray-900">Prospectus</h3>
-                <p className="text-gray-600 text-sm">
-                  Complete college information
-                </p>
-              </div>
-            </button>
-
-            {/* Card 3 */}
-            <button className="bg-white/80 backdrop-blur-xl border border-gray-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transform transition duration-300 ease-out flex items-center space-x-5 group">
-              <Download className="h-10 w-10 text-purple-600 group-hover:scale-110 transition-transform duration-300" />
-              <div className="text-left">
-                <h3 className="font-bold text-lg text-gray-900">
-                  Fee Structure
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Detailed fee information
-                </p>
-              </div>
-            </button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

@@ -86,9 +86,9 @@ const Home: React.FC = () => {
   ];
 
   const announcements = [
-    { title: "Admissions Open 2024-25", date: "2024-01-15", type: "admission" },
-    { title: "Annual Sports Day", date: "2024-02-20", type: "event" },
-    { title: "Mid-term Examinations", date: "2024-03-01", type: "exam" },
+    { title: "Admissions Open 2025-26", date: "2024-01-15", type: "admission" },
+    { title: "Annual Sports Day", date: "2026-02-20", type: "event" },
+    { title: "Mid-term Examinations", date: "2025-11-17", type: "exam" },
   ];
   const items = [
     { value: 15, suffix: "+", label: "Years of Excellence" },
@@ -144,12 +144,12 @@ const Home: React.FC = () => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-cinzel leading-tight tracking-wide text-white mb-5 drop-shadow-lg">
               Welcome to{" "}
               <span className="bg-gradient-to-r from-blue-600 to-cyan-300 text-transparent bg-clip-text underline decoration-blue-100/60 underline-offset-8">
-               Ripha
+               Riphah
               </span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl mb-10 text-blue-100/90 leading-relaxed drop-shadow-sm max-w-2xl mx-auto">
-              Ripha International College & University Kot Momin – Shaping
+              Riphah International College & University Kot Momin – Shaping
               future leaders through quality education in Intermediate and
               Associate Degree Program.
             </p>

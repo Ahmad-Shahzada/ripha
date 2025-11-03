@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">RIC</h3>
-                <p className="text-sm text-slate-400">Ripha International College</p>
+                <p className="text-sm text-slate-400">Riphah International College</p>
               </div>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed">
@@ -92,11 +92,11 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5" />
-                <a href="tel:+923001234567" className="text-slate-400 hover:text-blue-400 transition-colors">+92-XXX-XXXXXXX</a>
+                <a href="tel:+923001234567" className="text-slate-400 hover:text-blue-400 transition-colors">+92-310-6681075</a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5" />
-                <a href="mailto:info@ric.edu.pk" className="text-slate-400 hover:text-blue-400 transition-colors">info@ric.edu.pk</a>
+                <a href="mailto:info@ric.edu.pk" className="text-slate-400 hover:text-blue-400 transition-colors">Coordinator.kotmomin@ric.edu.pk</a>
               </div>
             </div>
           </div>
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
         {/* Bottom Bar: Copyright & Socials */}
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between">
           <p className="text-sm text-slate-500 text-center sm:text-left mb-4 sm:mb-0">
-            © {new Date().getFullYear()} Ripha International College. All Rights Reserved.
+            © {new Date().getFullYear()} Riphah International College. All Rights Reserved.
           </p>
           <div className="flex space-x-2">
             {socialLinks.map(({ Icon, href, name, hoverColor }) => (

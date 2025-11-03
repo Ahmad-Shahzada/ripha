@@ -32,7 +32,7 @@ const News: React.FC = () => {
       id: 1,
       title: "Admissions Open for Session 2025",
       excerpt:
-        "Ripha International College announces admissions for Intermediate and ADP programs. Early bird discount available.",
+        "Riphah International College announces admissions for Intermediate and ADP programs. Early bird discount available.",
       content:
         "We are excited to announce that admissions are now open for the academic session 2024-25. Students can apply for various programs including FSc Pre-Medical, Pre-Engineering, ICS, ICom, FA, and ADP programs.",
       category: "admissions",
@@ -184,7 +184,7 @@ const News: React.FC = () => {
             </h1>
             <p className="text-xl  text-blue-200 max-w-3xl mx-auto leading-relaxed">
               Stay updated with the latest news, events, and announcements from
-              Ripha International College
+              Riphah International College
             </p>
           </motion.div>
         </div>

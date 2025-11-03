@@ -22,19 +22,19 @@ const Contact: React.FC = () => {
     {
       icon: Phone,
       title: "Phone",
-      content: "+92-XXX-XXXXXXX",
+      content: "+92-310-6681075",
       color: "text-green-600",
     },
     {
       icon: Mail,
       title: "Email",
-      content: "info@ric.edu.pk",
+      content: "Coordinator.kotmomin@ric.edu.pk",
       color: "text-purple-600",
     },
     {
       icon: Clock,
       title: "Office Hours",
-      content: "Mon - Fri: 8:00 AM - 4:00 PM",
+      content: "Mon - Fri: 8:00 AM - 2:00 PM",
       color: "text-orange-600",
     },
   ];
@@ -42,13 +42,13 @@ const Contact: React.FC = () => {
   const departments = [
     {
       name: "Admissions Office",
-      phone: "+92-XXX-XXXXXXX",
-      email: "admissions@ric.edu.pk",
+      phone: "+92-310-6681075",
+      email: "Coordinator.kotmomin@ric.edu.pk",
     },
     {
       name: "Academic Office",
-      phone: "+92-XXX-XXXXXXX",
-      email: "academic@ric.edu.pk",
+      phone: "+92-345-8668015",
+      email: "Coordinator.kotmomin@ric.edu.pk",
     }
   ];
 
@@ -95,8 +95,8 @@ const Contact: React.FC = () => {
 
       {/* Contact Information */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {contactInfo.map((info, index) => (
               <div
                 key={index}
@@ -117,7 +117,7 @@ const Contact: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {info.title}
                 </h3>
-                <p className="text-gray-600">{info.content}</p>
+                <p className="text-gray-600 ">{info.content}</p>
               </div>
             ))}
           </div>

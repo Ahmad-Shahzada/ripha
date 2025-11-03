@@ -65,7 +65,7 @@ const Hero = () => {
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl mb-10 text-blue-100/90 leading-relaxed drop-shadow-sm max-w-2xl mx-auto">
-              Ripha International College & University Kot Momin – Shaping
+              Riphah International College & University Kot Momin – Shaping
               future leaders through quality education in Intermediate and
               Associate Degree Programs.
             </p>
